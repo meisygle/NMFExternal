@@ -32,7 +32,7 @@ def externalpredict(train_file,test_file):
     W = model.fit_transform(X)
     H = model.components_
 
-
+    #external test or predict procedure
     test = model.transform(X_pred)        
     Y = np.dot(test,H)
     YF = pd.DataFrame(Y)
@@ -40,6 +40,18 @@ def externalpredict(train_file,test_file):
     YF.index = rownames_pred    
 
     excel_file = ".\\%s.predict.xlsx" % test_file
+    YF.to_excel(excel_file)  
+    
+    #cas studies: predict missing values in X    
+    #test = model.transform(X)   # using the external test or predict procedure, re-mapping X into the reduced space as test matrix    
+    #Y = np.dot(test,H)
+    
+    Y = np.dot(W,H) # or, X = WH
+    YF = pd.DataFrame(Y)
+    YF.columns = colnames_pred
+    YF.index = rownames_pred    
+
+    excel_file = ".\\X.predict.xlsx"
     YF.to_excel(excel_file)     
 
         
